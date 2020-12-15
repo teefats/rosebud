@@ -32,6 +32,11 @@ class BoardTopicsTests(TestCase):
     def test_board_topics_url_resolves_board_topics_view(self):
         view = resolve('/boards/1/')
         self.assertEquals(view.func, board_topics)
+    def test_board_topics_view_containts_link_to_homepage(self):
+        board_topics_url = reverse('board_topics', kwargs={'pk': 1})
+        response = self.client.get(board_topics_url)
+        homepage_url =reverse('home')
+        self.assertContains(response, 'href="{0}"'.format(homepage_url))
     
 class HomeTests(TestCase):
     def setUp(self):
@@ -48,6 +53,8 @@ class HomeTests(TestCase):
     def test_home_view_contains_link_to_topics_page(self):
         board_topics_url = reverse('board_topics', kwargs= {'pk':self.board.pk})
         self.assertContains(self.response,'href="{0}"'.format(board_topics_url))
+
+
 
 
     
