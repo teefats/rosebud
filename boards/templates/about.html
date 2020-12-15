@@ -1,0 +1,44 @@
+{% load static %}
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'C:/Users/tee_f/Documents/story_board/roseboard/boards/static/boards/styles.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <header><h1>New Year Countdown</h1></header>
+    <div id="countdown" class="countdown">
+    <div class="time">
+        <h2 id="year">00</h2>
+        <small>Year</small>
+    </div>
+    <div class="time">
+        <h2 id="days">00</h2>
+        <small>Days</small>
+    </div>
+    <div class="time">
+        <h2 id="minutes">00</h2>
+        <small>Minutes</small>
+    </div>
+     <div class="time">
+        <h2 id="hours">00</h2>
+        <small>Hours</small>
+    </div>
+    <div class="time">
+        <h2 id="seconds">00</h2>
+        <small>Seconds</small>
+    </div>
+    </div>
+    <img
+    src="./img/spinner.gif"
+    alt="Loading..."
+    id="loading"
+    class="loading"
+  />
+    <script src="{% static 'C:/Users/tee_f/Documents/story_board/roseboard/boards/static/boards/styles.css' %}"></script>
+</body>
+</html>
