@@ -12,6 +12,7 @@
            
 
            {% block content %}
+           <a href = "{% url 'new_topic' board.pk %}"><button name = "new_post" class="btn btn-primary"> Start a new post</button></a>
 <table class="table">
     <thead class="thead-inverse">
         <tr>
@@ -34,5 +35,5 @@
         {% endfor %}
     </tbody>
 </table>
-<a href = "{% url 'new_topic' board.pk %}"><button name = "new_post" class="btn btn-success"> Start a new post</button></a>
+
            {% endblock %}
