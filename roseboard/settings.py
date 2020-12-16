@@ -33,13 +33,16 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'boards',
-    "bootstrap4",
+    'bootstrap4',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'widget_tweaks'
+,
 ]
 
 MIDDLEWARE = [
