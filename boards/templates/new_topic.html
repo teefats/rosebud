@@ -12,5 +12,17 @@ Start a new topic
 {% endblock %}
 
 {% block content%}
+<form method="POST">
+    {% csrf_token %}
+    <div class="form_group">
+        <label for="id_subject">Subject</label>
+    <input type="text" class="form-control" id="id_subject" name="subject">
+    </div>
+    <div class="form_group">
+        <label for="id_message">Message</label>
+    <textarea type="text" name="message" rows="5" class="form-control" id="id_message" name="subject"></textarea>
+    </div>
+    <button class="mt-2 btn btn-success">Post</button>
+</form>
 
 {% endblock %}
