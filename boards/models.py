@@ -21,6 +21,9 @@ class Topic(models.Model):
     board = models.ForeignKey(Board, related_name= 'topics', on_delete=CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=CASCADE)
 
+    def __str__(self):
+        return self.subject
+
 class Post(models.Model):
     message= models.TextField(max_length=4000)
     topic = models.ForeignKey(Topic, related_name='posts', on_delete=CASCADE)

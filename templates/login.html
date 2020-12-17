@@ -15,6 +15,7 @@
 
 <form method="post" novalidate>
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
     {% include 'includes/form.html' %}
     <button type="submit" class="btn btn-primary">Log in</button>
 
@@ -22,8 +23,12 @@
 </div>
 <div class="text-center py-2">
     <small>
-      <a href="#" class="text-muted">Forgot your password?</a>
+      <a href="{% url 'password_reset' %}" class="text-muted">Forgot your password?</a> 
+      
     </small>
+    <div class="card-footer text-muted text-center">
+      Already have an account? <a href="{% url 'signup' %}">Sign up</a>
+    </div>
   </div>
 </div>
 </div>
