@@ -1,22 +1,52 @@
-from django.contrib.auth.models import User
-from django.db.models.query import RawQuerySet
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import Http404
+# from django.contrib.auth.models import User
+# from django.db.models.query import RawQuerySet
+# from django.shortcuts import render, get_object_or_404, redirect
+# from django.http import Http404
+# from django.db.models import Count
+# from .models import Board, Topic, Post
+# from .forms import NewTopicForm, PostForm
+# from django.views.generic import UpdateView, ListView
+# from django.contrib.auth.decorators import login_required
+# from django.utils import timezone
+# from django.utils.decorators import method_decorator
+
+
 from django.db.models import Count
-from .models import Board, Topic, Post
-from .forms import NewTopicForm, PostForm
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import UpdateView, ListView
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+
+from .forms import NewTopicForm, PostForm
+from .models import Board, Post, Topic
+class BoardListView(ListView):
+    model = Board
+    context_object_name ='boards'
+    template_name = 'home.html'
 
 
+# def board_topics(request, pk):
+#     board = get_object_or_404(Board, pk=pk)
+#     topics = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
+#     return render(request, 'topics.html', {'board': board, 'topics': topics})
 
-def home(request):
-    boards = Board.objects.all()
-    return render(request, 'home.html', {'boards': boards})
+class TopicListView(ListView):
+    model = Topic
+    context_object_name = 'topics'
+    template_name = 'topics.html'
+    paginate_by = 20
 
-def board_topics(request, pk):
-    board = get_object_or_404(Board, pk=pk)
-    topics = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
-    return render(request, 'topics.html', {'board': board, 'topics': topics})
+    def get_context_data(self, **kwargs):
+        kwargs['board'] = self.board
+        return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
+        queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
+        return queryset
+
 
 
 def contact_us(request):
@@ -74,3 +104,23 @@ def reply_topic(request, pk, topic_pk):
     else:
         form = PostForm()
     return render(request, 'reply_topic.html', {'topic': topic, 'form': form})
+
+@method_decorator(login_required, name='dispatch')
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ('message', )
+    template_name = 'edit_post.html'
+    pk_url_kwarg = 'post_pk'
+    context_object_name = 'post'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
+
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.updated_by = self.request.user
+        post.updated_at = timezone.now()
+        post.save()
+        return redirect('topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
