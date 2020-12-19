@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db.models.query import RawQuerySet
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import Http404
+from django.db.models import Count
 from .models import Board, Topic, Post
 from .forms import NewTopicForm, PostForm
 from django.contrib.auth.decorators import login_required
@@ -13,8 +14,10 @@ def home(request):
     return render(request, 'home.html', {'boards': boards})
 
 def board_topics(request, pk):
-    board = get_object_or_404(Board, pk=pk)         
-    return render(request, 'topics.html', {'board': board})
+    board = get_object_or_404(Board, pk=pk)
+    topics = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
+    return render(request, 'topics.html', {'board': board, 'topics': topics})
+
 
 def contact_us(request):
     return render(request, 'contact_us.html')
@@ -48,9 +51,8 @@ def new_topic(request, pk):
         form = NewTopicForm()
     return render(request, 'new_topic.html', {'board': board, 'form': form})
 
-
 def topic_posts(request, pk, topic_pk):
-    topic = get_object_or_404(Topic, board__pk = pk, pk = topic_pk)
+    topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
     topic.views += 1
     topic.save()
     return render(request, 'topic_posts.html', {'topic': topic})
