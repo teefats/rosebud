@@ -12,7 +12,10 @@
            
 
            {% block content %}
+           <div class="mb-4">
            <a href = "{% url 'new_topic' board.pk %}"><button name = "new_post" class="btn btn-primary"> Start a new post</button></a>
+        </div>
+         
 <table class="table">
     <thead class="thead-inverse">
         <tr>
@@ -26,11 +29,12 @@
     <tbody>
         {% for topic in board.topics.all %}
         <tr>
-            <td>{{ topic.subject }} </td>
+            <td><a href="{% url 'topic_posts' board.pk topic.pk %}">{{ topic.subject }}</a></td>
             <td>{{ topic.starter.username }}</td>
+            
             <td>0</td>
-            <td>0</td>
-            <td>{{ topic.last_updated }}</td>
+          <td>0</td>
+          <td>{{ topic.last_updated }}</td>
         </tr>
         {% endfor %}
     </tbody>

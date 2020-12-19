@@ -5,7 +5,8 @@ from django.db import models
 # from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
-# from django.urls import reverse
+from django.urls import reverse
+# from django.utils.text import Truncator
 
 # Create your models here.
 class Board(models.Model):
@@ -20,6 +21,7 @@ class Topic(models.Model):
     last_updated = models.DateTimeField(auto_now_add=True)
     board = models.ForeignKey(Board, related_name= 'topics', on_delete=CASCADE)
     starter = models.ForeignKey(User, related_name='topics', on_delete=CASCADE)
+    views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.subject
@@ -31,6 +33,10 @@ class Post(models.Model):
     updated_at =models.DateTimeField(null=True)
     created_by = models.ForeignKey(User, related_name='posts', on_delete=CASCADE)
     updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=CASCADE)
+
+    def __str__(self):
+        return self.message
+
 
 # class User(models.Model):
 #     username= models.CharField(unique=True)
